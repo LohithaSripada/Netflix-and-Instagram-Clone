@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Instagram Clone</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50">
+
+  <div class="max-w-3xl mx-auto">
+
+    <!-- HEADER -->
+    <header class="flex items-center justify-between p-4 border-b sticky top-0 bg-white z-10">
+      <div class="flex items-center gap-3">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" class="h-8" />
+        <div class="font-semibold text-lg">InstaClone</div>
+      </div>
+      <input placeholder="Search" class="hidden sm:block bg-gray-100 px-3 py-1 rounded" />
+    </header>
+
+    <!-- STORIES -->
+    <section class="bg-white p-3 mt-3 rounded shadow-sm">
+      <div id="stories" class="flex gap-4 overflow-x-auto p-2"></div>
+    </section>
+
+    <!-- FEED -->
+    <section id="feed" class="mt-4 space-y-5"></section>
+
+  </div>
+
+  <script>
+    const posts = new Array(5).fill(0).map((_, i) => ({
+      user: "user_" + (i + 1),
+      avatar: "https://i.pravatar.cc/50?img=" + (i + 1),
+      img: "https://picsum.photos/600/500?random=" + (i + 20),
+      caption: "Caption for post " + (i + 1),
+      likes: Math.floor(Math.random() * 200) + 50
+    }));
+
+    // Stories
+    const storyDiv = document.getElementById("stories");
+    posts.forEach(u => {
+      const st = document.createElement("div");
+      st.className = "w-20 text-center";
+      st.innerHTML = `
+        <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 p-0.5 mx-auto">
+          <img src="${u.avatar}" class="w-full h-full rounded-full border-2 border-white object-cover" />
+        </div>
+        <div class="text-xs mt-1">${u.user}</div>
+      `;
+      storyDiv.appendChild(st);
+    });
+
+    // Feed
+    const feed = document.getElementById("feed");
+    posts.forEach(p => {
+      const block = document.createElement("div");
+      block.className = "bg-white rounded shadow-sm";
+
+      block.innerHTML = `
+        <div class="flex items-center gap-3 p-3">
+          <img src="${p.avatar}" class="w-10 h-10 rounded-full"/>
+          <div>
+            <div class="font-semibold text-sm">${p.user}</div>
+            <div class="text-xs text-gray-500">Location</div>
+          </div>
+        </div>
+
+        <img src="${p.img}" class="w-full max-h-[520px] object-cover" />
+
+        <div class="p-3">
+          <button class="likeBtn text-xl">♡</button>
+          <div class="text-sm mt-2"><span class="font-semibold likeCount">${p.likes}</span> likes</div>
+          <div class="text-sm mt-1"><span class="font-semibold">${p.user}</span> ${p.caption}</div>
+        </div>
+      `;
+
+      feed.appendChild(block);
+    });
+
+    // Like button logic
+    document.addEventListener("click", e => {
+      if (e.target.classList.contains("likeBtn")) {
+        const count = e.target.parentElement.querySelector(".likeCount");
+        count.textContent = parseInt(count.textContent) + 1;
+        e.target.textContent = "❤️";
+      }
+    });
+  </script>
+
+</body>
+</html>
